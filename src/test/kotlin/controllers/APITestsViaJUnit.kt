@@ -1,28 +1,24 @@
 package controllers
 
-import run.qontract.core.HttpRequest
-import run.qontract.core.HttpResponse
-import run.qontract.mock.ContractMock
-import run.qontract.mock.MockScenario
 import org.json.JSONObject
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.springframework.boot.SpringApplication
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.http.*
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.postForEntity
-import run.qontract.core.value.BooleanValue
-import run.qontract.core.value.StringValue
-import run.qontract.core.value.Value
+import run.qontract.core.HttpRequest
+import run.qontract.core.HttpResponse
+import run.qontract.mock.ContractMock
+import run.qontract.mock.MockScenario
 import java.io.File
 import java.net.URI
 import kotlin.test.assertEquals
 
 class APITestsViaJUnit {
-    private val petStoreContract: String = File("petstore.contract").readText()
+    private val petStoreContract: String = getContractFile().readText()
 
     @Test
     fun `search for available dogs`() {
@@ -90,22 +86,30 @@ class APITestsViaJUnit {
     }
 
     companion object {
-        lateinit var service: ConfigurableApplicationContext
-//        lateinit var mock: ContractMock
+        var service: ConfigurableApplicationContext? = null
 
         @BeforeAll
         @JvmStatic
         fun setUp() {
             service = SpringApplication.run(Application::class.java)
-//            mock = ContractMock(File("petstore.contract").readText(), 9000)
-//            mock.start()
         }
 
         @AfterAll
         @JvmStatic
         fun tearDown() {
-            service.stop()
-//            mock.close()
+            service?.stop()
         }
     }
 }
+
+private fun getContractFile(): File {
+    return if (isInGithubCI()) {
+        val workspace = System.getenv("GITHUB_WORKSPACE")
+        File("$workspace/contracts/examples/petstore/1.contract")
+    } else {
+        File(System.getProperty("user.home") + "/.qontract/repos/petstore/repo/examples/petstore/1.contract")
+    }
+}
+
+private fun isInGithubCI() = "true" == System.getenv("CI")
+
