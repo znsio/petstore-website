@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.postForEntity
 import run.qontract.core.HttpRequest
 import run.qontract.core.HttpResponse
+import run.qontract.core.versioning.contractNameToRelativePath
 import run.qontract.core.versioning.getContractFilePath
 import run.qontract.mock.ContractMock
 import run.qontract.mock.MockScenario
@@ -19,7 +20,7 @@ import java.net.URI
 import kotlin.test.assertEquals
 
 class APITestsViaJUnit {
-    private val petStoreContract: String = getContractFile("examples.petstore", 1).readText()
+    private val petStoreContract: String = getContractText("examples.petstore", 1)
 
     @Test
     fun `search for available dogs`() {
@@ -103,14 +104,15 @@ class APITestsViaJUnit {
     }
 }
 
-fun getContractFile(name: String, version: Int) = File(getContractPath(name, version))
+fun getContractText(name: String, version: Int): String = File(getContractPath(name, version)).readText()
 
 fun getContractPath(name: String, version: Int): String {
     return if (isInGithubCI()) {
         val workspace = System.getenv("GITHUB_WORKSPACE")
-        File("$workspace/contracts/examples/petstore/1.contract").absolutePath
+        val filename = workspace + File.separator + "contracts" + File.separator + contractNameToRelativePath(name) + File.separator + version.toString() + ".contract"
+        File(filename).absolutePath
     } else {
-        File(getContractFilePath("examples.petstore", 1)).absolutePath
+        File(getContractFilePath(name, version)).absolutePath
     }
 }
 
