@@ -43,7 +43,7 @@ dependencies {
     testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
     testImplementation "org.jetbrains.kotlin:kotlin-test"
 
-    testImplementation('run.qontract:qontract-core:0.4.1'){
+    testImplementation('run.qontract:qontract-core:0.4.2'){
         exclude group: 'org.slf4j', module: 'slf4j-nop'
     }
 
