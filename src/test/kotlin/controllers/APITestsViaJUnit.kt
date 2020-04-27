@@ -4,6 +4,7 @@ import org.json.JSONObject
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
 import org.springframework.boot.SpringApplication
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.http.*
@@ -11,12 +12,13 @@ import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.postForEntity
 import run.qontract.core.HttpRequest
 import run.qontract.core.HttpResponse
+import run.qontract.core.getLatestCompatibleContractFileName
 import run.qontract.core.versioning.contractNameToRelativePath
-import run.qontract.core.versioning.getContractFilePath
 import run.qontract.mock.ContractMock
 import run.qontract.mock.MockScenario
 import java.io.File
 import java.net.URI
+import java.nio.file.Paths
 import kotlin.test.assertEquals
 
 class APITestsViaJUnit {
@@ -107,14 +109,14 @@ class APITestsViaJUnit {
 fun getContractText(name: String, version: Int): String = File(getContractPath(name, version)).readText()
 
 fun getContractPath(name: String, version: Int): String {
-    return if (isInGithubCI()) {
+    return if (inGithubCI()) {
         val workspace = System.getenv("GITHUB_WORKSPACE")
-        val filename = workspace + File.separator + "contracts" + File.separator + contractNameToRelativePath(name) + File.separator + version.toString() + ".contract"
-        File(filename).absolutePath
+        val contractPath = workspace + File.separator + "contracts" + File.separator + contractNameToRelativePath(name)
+        getLatestCompatibleContractFileName(File(contractPath).absolutePath, version) ?: fail("Contract must exist at $contractPath")
     } else {
-        File(getContractFilePath(name, version)).absolutePath
+        val path = Paths.get(System.getProperty("user.home"), "contracts", "petstore-contracts", contractNameToRelativePath(name)).toAbsolutePath()
+        getLatestCompatibleContractFileName(File(path.toString()).absolutePath, version) ?: fail("Contract must exist at path USER_HOME/contracts/petstore-contracts. Checkout https://github.com/qontract/petstore-contracts into USER_HOME/contracts.")
     }
 }
 
-private fun isInGithubCI() = "true" == System.getenv("CI")
-
+private fun inGithubCI() = "true" == System.getenv("CI")
