@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.postForEntity
 import run.qontract.core.HttpRequest
 import run.qontract.core.HttpResponse
-import run.qontract.core.getLatestCompatibleContractFileName
+import run.qontract.core.getContractFileName
 import run.qontract.core.versioning.contractNameToRelativePath
 import run.qontract.mock.ContractMock
 import run.qontract.mock.MockScenario
@@ -22,7 +22,7 @@ import java.nio.file.Paths
 import kotlin.test.assertEquals
 
 class APITestsViaJUnit {
-    private val petStoreContract: String = getContractText("examples.petstore", 1)
+    private val petStoreContract: String = getContractText("run.qontract.examples.petstore", 1, 1)
 
     @Test
     fun `search for available dogs`() {
@@ -106,16 +106,16 @@ class APITestsViaJUnit {
     }
 }
 
-fun getContractText(name: String, version: Int): String = File(getContractPath(name, version)).readText()
+fun getContractText(name: String, majorVersion: Int, minorVersion: Int): String = File(getContractPath(name, majorVersion, minorVersion)).readText()
 
-fun getContractPath(name: String, version: Int): String {
+fun getContractPath(name: String, majorVersion: Int, minorVersion: Int): String {
     return if (inGithubCI()) {
         val workspace = System.getenv("GITHUB_WORKSPACE")
         val contractPath = workspace + File.separator + "contracts" + File.separator + contractNameToRelativePath(name)
-        getLatestCompatibleContractFileName(File(contractPath).absolutePath, version) ?: fail("Contract must exist at $contractPath")
+        getContractFileName(File(contractPath).absolutePath, majorVersion, minorVersion) ?: fail("Contract must exist at $contractPath")
     } else {
         val path = Paths.get(System.getProperty("user.home"), "contracts", "petstore-contracts", contractNameToRelativePath(name)).toAbsolutePath()
-        getLatestCompatibleContractFileName(File(path.toString()).absolutePath, version) ?: fail("Contract must exist at path USER_HOME/contracts/petstore-contracts. Checkout https://github.com/qontract/petstore-contracts into USER_HOME/contracts.")
+        getContractFileName(File(path.toString()).absolutePath, majorVersion, minorVersion) ?: fail("Contract must exist at path USER_HOME/contracts/petstore-contracts. Checkout https://github.com/qontract/petstore-contracts into USER_HOME/contracts.")
     }
 }
 
