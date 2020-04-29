@@ -1,0 +1,28 @@
+{
+  "mock-http-request": {
+    "method": "GET",
+    "path": "/pets",
+    "query": {
+      "type": "dog",
+      "status": "available",
+      "name": ""
+    }
+  },
+  "mock-http-response": {
+    "status": 200,
+    "body": [
+      {
+        "name": "Archie",
+        "type": "dog",
+        "status": "available",
+        "id": 10
+      },
+      {
+        "name": "Reggie",
+        "type": "dog",
+        "status": "available",
+        "id": 20
+      }
+    ]
+  }
+}

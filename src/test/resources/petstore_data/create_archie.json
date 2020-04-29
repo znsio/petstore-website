@@ -1,0 +1,16 @@
+{
+  "mock-http-request": {
+    "method": "PUT",
+    "path": "/pets",
+    "body": {
+      "name": "Archie",
+      "type": "dog",
+      "status": "available"
+    }
+  },
+
+  "mock-http-response": {
+    "status": 200,
+    "body": "12"
+  }
+}
