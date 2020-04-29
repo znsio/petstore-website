@@ -21,22 +21,13 @@ import kotlin.test.assertEquals
 class APITestsViaJUnit {
     @Test
     fun `search for available dogs`() {
-            val response = query("http://localhost:8080/findFirstAvailablePet?type=dog")
-            assertEquals(HttpStatus.OK, response.statusCode)
-
-            val petInfo = JSONObject(response.body)
-
-            assertValuesExpected(petInfo, 10, "ARCHIE")
-    }
-
-    private fun assertValuesExpected(pet: JSONObject, id: Int, name: String) {
-        assertEquals(id, pet.getInt("id"))
-        assertEquals(name, pet.getString("name"))
-    }
-
-    private fun query(url: String): ResponseEntity<String> {
         val apiClient = RestTemplate()
-        return apiClient.getForEntity(URI.create(url), String::class.java)
+        val response = apiClient.getForEntity(URI.create("http://localhost:8080/findFirstAvailablePet?type=dog"), String::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+        val petInfo = JSONObject(response.body)
+        assertEquals(10, petInfo.getInt("id"))
+        assertEquals("ARCHIE", petInfo.getString("name"))
     }
 
     @Test
