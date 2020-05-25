@@ -12,8 +12,7 @@ import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.postForEntity
 import run.qontract.core.getContractFileName
 import run.qontract.core.versioning.contractNameToRelativePath
-import run.qontract.fake.createStubFromContractAndData
-import run.qontract.fake.createStubFromContracts
+import run.qontract.stub.createStubFromContractAndData
 import java.io.File
 import java.net.URI
 import java.nio.file.Paths
