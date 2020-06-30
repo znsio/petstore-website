@@ -11,8 +11,10 @@ import org.springframework.http.*
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.postForEntity
 import run.qontract.core.getContractFileName
+import run.qontract.core.utilities.contractFilePathsFrom
 import run.qontract.core.versioning.contractNameToRelativePath
-import run.qontract.stub.createStubFromContractAndData
+import run.qontract.stub.ContractStub
+import run.qontract.stub.createStubFromContracts
 import java.io.File
 import java.net.URI
 import java.nio.file.Paths
@@ -53,12 +55,19 @@ class APITestsViaJUnit {
 
     companion object {
         private var service: ConfigurableApplicationContext? = null
-        private val contractGherkin: String = getContractText("run.qontract.examples.petstore", 1, 1)
-        private val stub = createStubFromContractAndData(contractGherkin, "./src/test/resources/petstore_data")
+        var workingDirectory = "./build/qontract"
+
+        private lateinit var stub: ContractStub
 
         @BeforeAll
         @JvmStatic
         fun setUp() {
+            val workingDirectoryFile = File(workingDirectory)
+            if (workingDirectoryFile.exists())
+                workingDirectoryFile.deleteRecursively()
+
+            val contractPaths = contractFilePathsFrom("./manifest.json", workingDirectory)
+            stub = createStubFromContracts(contractPaths, listOf("./src/test/resources/petstore_data"))
             service = SpringApplication.run(Application::class.java)
         }
 
