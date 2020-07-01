@@ -79,18 +79,3 @@ class APITestsViaJUnit {
         }
     }
 }
-
-fun getContractText(name: String, majorVersion: Int, minorVersion: Int): String = File(getContractPath(name, majorVersion, minorVersion)).readText()
-
-fun getContractPath(name: String, majorVersion: Int, minorVersion: Int): String {
-    return if (inGithubCI()) {
-        val workspace = System.getenv("GITHUB_WORKSPACE")
-        val contractPath = workspace + File.separator + "contracts" + File.separator + contractNameToRelativePath(name)
-        getContractFileName(File(contractPath).absolutePath, majorVersion, minorVersion) ?: fail("Contract must exist at $contractPath")
-    } else {
-        val path = Paths.get(System.getProperty("user.home"), "contracts", "petstore-contracts", contractNameToRelativePath(name)).toAbsolutePath()
-        getContractFileName(File(path.toString()).absolutePath, majorVersion, minorVersion) ?: fail("Contract must exist at path USER_HOME/contracts/petstore-contracts. Checkout https://github.com/qontract/petstore-contracts into USER_HOME/contracts.")
-    }
-}
-
-private fun inGithubCI() = "true" == System.getenv("CI")
