@@ -1,8 +1,0 @@
-[
-  {
-    "git": "https://github.com/qontract/petstore-contracts.git",
-    "paths": [
-      "run/qontract/examples/petstore/1.qontract"
-    ]
-  }
-]

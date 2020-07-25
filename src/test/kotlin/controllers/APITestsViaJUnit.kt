@@ -4,20 +4,15 @@ import org.json.JSONObject
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.fail
 import org.springframework.boot.SpringApplication
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.http.*
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.postForEntity
-import run.qontract.core.getContractFileName
-import run.qontract.core.utilities.contractFilePathsFrom
-import run.qontract.core.versioning.contractNameToRelativePath
+import run.qontract.core.utilities.contractFilePaths
 import run.qontract.stub.ContractStub
 import run.qontract.stub.createStubFromContracts
-import java.io.File
 import java.net.URI
-import java.nio.file.Paths
 import kotlin.test.assertEquals
 
 class APITestsViaJUnit {
@@ -55,18 +50,13 @@ class APITestsViaJUnit {
 
     companion object {
         private var service: ConfigurableApplicationContext? = null
-        var workingDirectory = "./build/qontract"
 
         private lateinit var stub: ContractStub
 
         @BeforeAll
         @JvmStatic
         fun setUp() {
-            val workingDirectoryFile = File(workingDirectory)
-            if (workingDirectoryFile.exists())
-                workingDirectoryFile.deleteRecursively()
-
-            val contractPaths = contractFilePathsFrom("./manifest.json", workingDirectory)
+            val contractPaths = contractFilePaths()
             stub = createStubFromContracts(contractPaths, listOf("./src/test/resources/petstore_data"))
             service = SpringApplication.run(Application::class.java)
         }
