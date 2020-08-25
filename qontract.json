@@ -1,8 +1,9 @@
 {
   "sources": [
     {
-      "git": "https://github.com/qontract/petstore-contracts.git",
-      "paths": [
+      "provider": "git",
+      "repository": "https://github.com/qontract/petstore-contracts.git",
+      "stub": [
         "run/qontract/examples/petstore/1.qontract"
       ]
     }
