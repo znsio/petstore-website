@@ -9,9 +9,8 @@ import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.http.*
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.postForEntity
-import run.qontract.core.utilities.contractFilePaths
 import run.qontract.stub.ContractStub
-import run.qontract.stub.createStubFromContracts
+import run.qontract.stub.createStub
 import java.net.URI
 import kotlin.test.assertEquals
 
@@ -29,17 +28,17 @@ class APITestsViaJUnit {
 
     @Test
     fun `create pet`() {
-            val requestBody = """{"name": "Archie", "type": "dog", "status": "available"}"""
+        val requestBody = """{"name": "Archie", "type": "dog", "status": "available"}"""
 
-            val apiClient = RestTemplate()
-            val url = URI.create("http://localhost:8080/create-pet")
-            val requestEntity = jsonRequest(url, requestBody)
-            val responseEntity = apiClient.postForEntity<String>(url, requestEntity)
+        val apiClient = RestTemplate()
+        val url = URI.create("http://localhost:8080/create-pet")
+        val requestEntity = jsonRequest(url, requestBody)
+        val responseEntity = apiClient.postForEntity<String>(url, requestEntity)
 
-            assertEquals(HttpStatus.OK, responseEntity.statusCode)
-            val jsonResponse = JSONObject(responseEntity.body)
-            assertEquals("success", jsonResponse.getString("status"))
-            assertEquals(12, jsonResponse.getInt("id"))
+        assertEquals(HttpStatus.OK, responseEntity.statusCode)
+        val jsonResponse = JSONObject(responseEntity.body)
+        assertEquals("success", jsonResponse.getString("status"))
+        assertEquals(12, jsonResponse.getInt("id"))
     }
 
     private fun jsonRequest(url: URI, requestBody: String): RequestEntity<String> {
@@ -56,8 +55,7 @@ class APITestsViaJUnit {
         @BeforeAll
         @JvmStatic
         fun setUp() {
-            val contractPaths = contractFilePaths()
-            stub = createStubFromContracts(contractPaths, listOf("./src/test/resources/petstore_data"))
+            stub = createStub()
             service = SpringApplication.run(Application::class.java)
         }
 
