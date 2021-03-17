@@ -9,8 +9,8 @@ import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.http.*
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.postForEntity
-import run.qontract.stub.ContractStub
-import run.qontract.stub.createStub
+import `in`.specmatic.stub.ContractStub
+import `in`.specmatic.stub.createStub
 import java.net.URI
 import kotlin.test.assertEquals
 
@@ -32,7 +32,7 @@ class APITestsViaJUnit {
 
         val apiClient = RestTemplate()
         val url = URI.create("http://localhost:8080/create-pet")
-        val requestEntity = jsonRequest(url, requestBody)
+        val requestEntity = authenticatedJsonRequest(url, requestBody)
         val responseEntity = apiClient.postForEntity<String>(url, requestEntity)
 
         assertEquals(HttpStatus.OK, responseEntity.statusCode)
@@ -41,7 +41,7 @@ class APITestsViaJUnit {
         assertEquals(12, jsonResponse.getInt("id"))
     }
 
-    private fun jsonRequest(url: URI, requestBody: String): RequestEntity<String> {
+    private fun authenticatedJsonRequest(url: URI, requestBody: String): RequestEntity<String> {
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
         return RequestEntity(requestBody, headers, HttpMethod.PUT, url)
