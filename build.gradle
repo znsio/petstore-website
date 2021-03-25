@@ -43,7 +43,7 @@ dependencies {
     testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
     testImplementation "org.jetbrains.kotlin:kotlin-test"
 
-    testImplementation('in.specmatic:specmatic-core:0.24.1')
+    testImplementation('in.specmatic:specmatic-core:0.24.2')
 
     testImplementation(
             'org.assertj:assertj-core:3.12.2',
