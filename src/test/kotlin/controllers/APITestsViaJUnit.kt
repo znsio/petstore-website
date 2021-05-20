@@ -11,8 +11,8 @@ import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.postForEntity
 import `in`.specmatic.stub.ContractStub
 import `in`.specmatic.stub.createStub
+import junit.framework.Assert.assertEquals
 import java.net.URI
-import kotlin.test.assertEquals
 
 class APITestsViaJUnit {
     @Test
