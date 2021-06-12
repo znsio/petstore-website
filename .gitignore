@@ -6,3 +6,5 @@ build/*
 .idea/*
 .gradle/*
 .qontract
+/.spec
+/.specmatic
