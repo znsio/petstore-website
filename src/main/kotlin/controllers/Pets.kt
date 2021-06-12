@@ -66,4 +66,3 @@ fun getAuthToken(username: String, password: String): String {
     val response = RestTemplate().exchange(request, String::class.java)
     return response.body
 }
-

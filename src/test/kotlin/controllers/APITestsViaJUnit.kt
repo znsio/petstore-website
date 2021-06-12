@@ -4,6 +4,7 @@ import org.json.JSONObject
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.springframework.boot.SpringApplication
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.http.*
@@ -11,7 +12,6 @@ import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.postForEntity
 import `in`.specmatic.stub.ContractStub
 import `in`.specmatic.stub.createStub
-import junit.framework.Assert.assertEquals
 import java.net.URI
 
 class APITestsViaJUnit {
