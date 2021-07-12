@@ -43,13 +43,13 @@ dependencies {
     testImplementation('in.specmatic:specmatic-core:0.27.0')
 
     testImplementation(
-            'org.assertj:assertj-core:3.19.0',
+            'org.assertj:assertj-core:3.20.2',
             'org.junit.jupiter:junit-jupiter-api:5.7.2'
     )
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
 
-    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.7.2')
 }
 
 test {
