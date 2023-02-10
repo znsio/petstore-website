@@ -40,7 +40,7 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     implementation "org.jetbrains.kotlin:kotlin-reflect"
 
-    testImplementation('in.specmatic:specmatic-core:0.27.0')
+    testImplementation('in.specmatic:specmatic-core:0.60.0')
 
     testImplementation(
             'org.assertj:assertj-core:3.19.0',
